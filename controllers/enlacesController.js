@@ -54,6 +54,7 @@ exports.todosEnlaces = async (req, res) => {
 }
 // Obtener el enlace
 exports.obtenerEnlace = async (req, res, next) => {
+    const { url } = req.params
     // Verificar si existe el enlace
     const enlace = await Enlaces.findOne({ url: req.params.url })
     if (!enlace) {
@@ -62,19 +63,5 @@ exports.obtenerEnlace = async (req, res, next) => {
     }
     // Si el enlace existe
     res.json({ archivo: enlace.nombre })
-    return
-    // Si las descargas son iguales uno : borrar entrada y archivo
-    const { descargas, nombre } = enlace;
-    if (descargas === 1) {
-        // Eliminar el archivo y la entrada de la base de datos
-        req.archivo = nombre
-        // Eliminar la entrada en la base de datos
-        await Enlaces.findOneAndRemove(req.params.url)
-        next()
-    } else {
-        // Si las descargas son mayores a uno : restar uno
-        enlace.descargas--
-        await enlace.save()
-    }
-
+    next()
 }
