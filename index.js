@@ -14,6 +14,9 @@ app.use(cors(opcionesCors))
 const port = process.env.PORT || 4400
 // Habilitar leer los valores del body
 app.use(express.json())
+// Habilitar carpeta pública
+app.use(express.static('uploads'))
+
 // Definiendo los endpoints del servidor
 app.use('/api/usuarios', require('./routes/usuarios'))
 

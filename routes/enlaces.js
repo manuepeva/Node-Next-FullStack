@@ -19,7 +19,6 @@ router.get('/',
 )
 router.get('/:url',
     enlacesController.obtenerEnlace,
-    archivosController.eliminarArchivo
 )
 
 module.exports = router
