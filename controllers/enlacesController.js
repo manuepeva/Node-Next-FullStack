@@ -2,6 +2,8 @@ const Enlaces = require('../models/enlace')
 const shortid = require('shortid')
 const bcrypt = require('bcrypt')
 const { validationResult } = require('express-validator')
+const enlace = require('../models/enlace')
+const { selectFields } = require('express-validator/src/select-fields')
 
 exports.nuevoEnlace = async (req, res, next) => {
     // Revisar si existen errores
@@ -10,10 +12,10 @@ exports.nuevoEnlace = async (req, res, next) => {
         return res.status(400).json({ errores: errores.array() })
     }
     // Crear el objeto con la información
-    const { nombre_original } = req.body
+    const { nombre_original, nombre } = req.body
     const enlace = new Enlaces()
     enlace.url = shortid.generate()
-    enlace.nombre = shortid.generate()
+    enlace.nombre = nombre
     enlace.nombre_original = nombre_original
 
     // En caso de que el usuario esté autenticado
@@ -40,9 +42,18 @@ exports.nuevoEnlace = async (req, res, next) => {
         console.log(error)
     }
 }
+
+// Obtiene un listado de todos los enlaces
+exports.todosEnlaces = async (req, res) => {
+    try {
+        const enlaces = await Enlaces.find({}).select('url -_id')
+        res.json({ enlaces })
+    } catch (error) {
+        console.log(error)
+    }
+}
 // Obtener el enlace
 exports.obtenerEnlace = async (req, res, next) => {
-    // console.log(req.params.url)
     // Verificar si existe el enlace
     const enlace = await Enlaces.findOne({ url: req.params.url })
     if (!enlace) {
@@ -51,6 +62,7 @@ exports.obtenerEnlace = async (req, res, next) => {
     }
     // Si el enlace existe
     res.json({ archivo: enlace.nombre })
+    return
     // Si las descargas son iguales uno : borrar entrada y archivo
     const { descargas, nombre } = enlace;
     if (descargas === 1) {

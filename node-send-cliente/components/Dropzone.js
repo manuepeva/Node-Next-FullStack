@@ -6,7 +6,7 @@ import appContext from '../context/app/appContext'
 const Dropzone = () => {
 
     const AppContext = useContext(appContext)
-    const { mostrarAlerta } = AppContext
+    const { cargando, mostrarAlerta, subirArchivo, crearEnlace } = AppContext
 
     const onDropRejected = () => {
         mostrarAlerta('No se pudo subir el archivo, el límite es de 1MB. Obtén una cuenta gratis para subir archivos más grandes')
@@ -16,7 +16,7 @@ const Dropzone = () => {
         // Crear un formdata
         const formData = new FormData()
         formData.append('archivo', acceptedFiles[0])
-        const resultado = await clienteAxios.post('/api/archivos', formData)
+        subirArchivo(formData, acceptedFiles[0].path)
     }, [])
     // Extraer contenido del dropzone
     const { getRootProps, getInputProps, isDragActive, acceptedFiles } = useDropzone({ onDropAccepted, onDropRejected, maxSize: 1000000 })
@@ -29,9 +29,6 @@ const Dropzone = () => {
             <p className="text-sm tex-gray-500">{(archivo.size / Math.pow(1024, 2)).toFixed(2)} MB</p>
         </li>
     ))
-    const crearEnlace = () => {
-        console.log('creando el enlace')
-    }
     return (
         <div
             className="md:flex-1 mb-3 mx-4 mt-16 lg:mt-0 flex flex-col items-center justify-center border-dashed border-gray-500 border-2 bg-gray-100 px-4">
@@ -41,11 +38,12 @@ const Dropzone = () => {
                     <ul>
                         {archivos}
                     </ul>
-                    <button
-                        type="button"
-                        className="bg-blue-700 w-full py-3 rounded-lg text-white my-10 hover:bg-blue-800"
-                        onClick={() => crearEnlace()}
-                    >Crear Enlace</button>
+                    {cargando ? <p className="my-10 text-center text-gray-600">Subiendo Archivos</p> :
+                        <button
+                            type="button"
+                            className="bg-blue-700 w-full py-3 rounded-lg text-white my-10 hover:bg-blue-800"
+                            onClick={() => crearEnlace()}
+                        >Crear Enlace</button>}
                 </div>
             ) : (
                     <div {...getRootProps({ className: 'dropzone w-full py-32' })}>
