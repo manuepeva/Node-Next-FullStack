@@ -20,7 +20,6 @@ exports.subirArchivo = async (req, res, next) => {
     const upload = multer(configuracionMulter).single('archivo')
 
     upload(req, res, async (error) => {
-        console.log(req.file)
         if (!error) {
             res.json({ archivo: req.file.filename })
         } else {
@@ -43,6 +42,7 @@ exports.eliminarArchivo = async (req, res) => {
 exports.descargar = async (req, res, next) => {
     // Obtiene el enlace
     const { archivo } = req.params
+    console.log(archivo, 'new console')
     const enlace = await Enlaces.findOne({ nombre: archivo })
     const archivoDescarga = __dirname + '/../uploads/' + archivo;
     res.download(archivoDescarga)
