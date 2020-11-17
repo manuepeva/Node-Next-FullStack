@@ -5,7 +5,8 @@ import {
     LOGIN_ERROR,
     LOGIN_EXITOSO,
     USUARIO_AUTENTICADO,
-    CERRAR_SESION
+    CERRAR_SESION,
+    AGREGAR_CONTRASEÑA
 } from '../../context/types/'
 
 export default (state, action) => {
@@ -32,7 +33,8 @@ export default (state, action) => {
         case USUARIO_AUTENTICADO:
             return {
                 ...state,
-                usuario: action.payload
+                usuario: action.payload,
+                autenticado: true
             }
         case CERRAR_SESION:
             localStorage.removeItem('token')
