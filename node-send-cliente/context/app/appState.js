@@ -7,7 +7,10 @@ import {
     OCULTAR_ALERTA,
     CREAR_ENLACE_ERROR,
     CREAR_ENLACE_EXITO,
-    SUBIR_ARCHIVO
+    SUBIR_ARCHIVO,
+    LIMPIAR_STATE,
+    AGREGAR_CONTRASEÑA,
+    AGREGAR_DESCARGAS
 } from '../../context/types/index'
 import appContext from './appContext'
 import appReducer from './appReducer'
@@ -80,6 +83,26 @@ const AppState = ({ children }) => {
             console.log(error)
         }
     }
+
+    const limpiarState = () => {
+        dispatch({
+            type: LIMPIAR_STATE
+        })
+    }
+    // Agregue la contraseña
+    const agregarContraseña = password => {
+        dispatch({
+            type: AGREGAR_CONTRASEÑA,
+            payload: password
+        })
+    }
+    // Agrega un número de descargas
+    const agregarDescargas = descargas => {
+        dispatch({
+            type: AGREGAR_DESCARGAS,
+            payload: descargas
+        })
+    }
     return (
         <appContext.Provider
             value={{
@@ -93,7 +116,10 @@ const AppState = ({ children }) => {
                 url: state.url,
                 mostrarAlerta,
                 subirArchivo,
-                crearEnlace
+                crearEnlace,
+                limpiarState,
+                agregarContraseña,
+                agregarDescargas
             }}
         >
             {children}

@@ -5,7 +5,10 @@ import {
     OCULTAR_ALERTA,
     CREAR_ENLACE_ERROR,
     CREAR_ENLACE_EXITO,
-    SUBIR_ARCHIVO
+    SUBIR_ARCHIVO,
+    LIMPIAR_STATE,
+    AGREGAR_CONTRASEÑA,
+    AGREGAR_DESCARGAS
 } from '../../context/types/index'
 
 export default (state, action) => {
@@ -43,6 +46,28 @@ export default (state, action) => {
             return {
                 ...state,
                 url: action.payload
+            }
+        case LIMPIAR_STATE:
+            return {
+                ...state,
+                mensaje_archivo: null,
+                nombre: '',
+                nombre_original: '',
+                cargando: null,
+                descargas: 1,
+                password: '',
+                autor: null,
+                url: ''
+            }
+        case AGREGAR_CONTRASEÑA:
+            return {
+                ...state,
+                password: action.payload
+            }
+        case AGREGAR_DESCARGAS:
+            return {
+                ...state,
+                descargas: action.payload
             }
         default:
             return state

@@ -18,6 +18,7 @@ router.get('/',
     enlacesController.todosEnlaces
 )
 router.get('/:url',
+    enlacesController.tienePassword,
     enlacesController.obtenerEnlace,
 )
 

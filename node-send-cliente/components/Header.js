@@ -22,6 +22,7 @@ const Header = () => {
 
     const redireccionar = () => {
         router.push('/')
+        limpiarState()
     }
 
     return (
