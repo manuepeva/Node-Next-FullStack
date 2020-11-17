@@ -1,10 +1,14 @@
 import Layout from '../../components/Layout'
 import clienteAxios from '../../config/axios'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import appContext from '../../context/app/appContext'
+import Alerta from '../../components/Alerta'
+
 
 export async function getServerSideProps({ params }) {
     const { enlace } = params
     const resultado = await clienteAxios.get(`/api/enlaces/${enlace}`)
+    console.log(resultado, 'enlace from 11[enlace]')
     return {
         props: {
             enlace: resultado.data
@@ -24,11 +28,25 @@ export async function getServerSidePaths() {
 
 
 export default ({ enlace }) => {
+    // Context de la aplicación
+    const AppContext = useContext(appContext)
+    const { mostrarAlerta, mensaje_archivo } = AppContext
+
     const [tienePassword, setTienePassword] = useState(enlace.password)
-    console.log(tienePassword)
-    const verificarContraseña = e => {
+    const [password, setPassword] = useState('')
+
+    const verificarPassword = async e => {
         e.preventDefault();
-        console.log('verificando...')
+        const data = {
+            password
+        }
+        try {
+            const resultado = await clienteAxios.post(`/api/enlaces/${enlace.enlace}`, data)
+            setTienePassword(resultado.data.password)
+            console.log(resultado.data.password, 'resultado data')
+        } catch (error) {
+            mostrarAlerta(error.response.data.msg)
+        }
     }
     return (
         <Layout>
@@ -36,12 +54,15 @@ export default ({ enlace }) => {
                 tienePassword ? (
                     <>
                         <p className="text-center">Este enlace está protegido por una contraseña</p>
+                        {
+                            mensaje_archivo && <Alerta />
+                        }
                         <div className="flex justify-center mt-5">
                             <div
                                 className="w-full max-w-lg">
                                 <form
                                     className="bg-white rounded shadow-md px-8 pt-6 pb-8 mb-4"
-                                    onSubmit={e => verificarContraseña(e)}
+                                    onSubmit={e => verificarPassword(e)}
                                 >
                                     <div className="mb-4">
                                         <label
@@ -53,6 +74,8 @@ export default ({ enlace }) => {
                                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                             id="password"
                                             placeholder="Contraseña del enlace"
+                                            value={password}
+                                            onChange={e => setPassword(e.target.value)}
                                         />
                                     </div>
                                     <input
