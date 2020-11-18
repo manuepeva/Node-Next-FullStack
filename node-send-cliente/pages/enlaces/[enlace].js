@@ -27,7 +27,6 @@ export async function getServerSidePaths() {
 
 
 export default ({ enlace }) => {
-    console.log(enlace, 'here the enlace')
     // Context de la aplicación
     const AppContext = useContext(appContext)
     const { mostrarAlerta, mensaje_archivo } = AppContext
@@ -43,7 +42,6 @@ export default ({ enlace }) => {
         try {
             const resultado = await clienteAxios.post(`/api/enlaces/${enlace.enlace}`, data)
             setTienePassword(resultado.data.password)
-            console.log(resultado.data.password, 'resultado data')
         } catch (error) {
             mostrarAlerta(error.response.data.msg)
         }
