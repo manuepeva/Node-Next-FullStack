@@ -63,7 +63,7 @@ exports.tienePassword = async (req, res, next) => {
         return next()
     }
     if (enlace.password) {
-        return res.json({ password: true, enlace: enlace.url })
+        return res.json({ password: true, enlace: enlace.url, archivo: enlace.nombre })
     }
     next()
 }

@@ -45,7 +45,7 @@ const Dropzone = () => {
                         {archivos}
                     </ul>
                     {
-                        autenticado ? <Formulario /> : 'nada...'
+                        autenticado ? <Formulario /> : null
                     }
                     {cargando ? <p className="my-10 text-center text-gray-600">Subiendo Archivos</p> :
                         <button
