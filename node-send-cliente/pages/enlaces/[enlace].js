@@ -8,7 +8,6 @@ import Alerta from '../../components/Alerta'
 export async function getServerSideProps({ params }) {
     const { enlace } = params
     const resultado = await clienteAxios.get(`/api/enlaces/${enlace}`)
-    console.log(resultado, 'enlace from 11[enlace]')
     return {
         props: {
             enlace: resultado.data
@@ -28,6 +27,7 @@ export async function getServerSidePaths() {
 
 
 export default ({ enlace }) => {
+    console.log(enlace, 'here the enlace')
     // Context de la aplicación
     const AppContext = useContext(appContext)
     const { mostrarAlerta, mensaje_archivo } = AppContext
